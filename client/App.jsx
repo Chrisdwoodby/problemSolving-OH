@@ -13,21 +13,35 @@ export default class App extends React.Component {
 
   componentDidMount() {/*your code here*/ }
 
-  addItem() {/*your code here */}
+  addItem(event) {/*your code here */
+    console.log(this.state.GroceryItem)
 
+    axios.post('http://localhost:3306/api', { // make s apost request when the submit button is clicked
+      item: this.state.GroceryItem  
+    })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+  }
   updateItem(event) {
-    console.log(event.target.value);
-    event.preventDefault();
-    /*your code here*/
+    var currWord = this.state.GroceryItem
+    var newWord = currWord + event.target.value;
+    console.log(newWord);
+    this.setState({
+      GroceryItem: newWord
+    })
   }
 
   render() {
     return (
       <div>
-        <input placeholder="Add Item" />
-        <button>Submit</button>
+        <input type="text" placeholder="Add Item" value={this.state.GroceryItem} onChange={this.updateItem.bind(this)}/>
+        <button onClick={this.addItem.bind(this)}>Submit</button>
         <ul>
-          <GroceryItem />
+          <GroceryItem stuff={this.state.gList}/>
         </ul>
       </div>
     );
